@@ -2,18 +2,16 @@ from collections import deque
 
 def solution(priorities, location):
     dq = deque((p, i) for i, p in enumerate(priorities))
-    
-    maximum = max(dq)[0]
+
     ans = 1
-    while(dq):
+    while(True):
         prior, index = dq.popleft()
 
-        if prior < maximum:
+        if dq and prior < max(dq)[0]:
             dq.append((prior, index))
             continue
 
         if index == location:
             return ans
 
-        maximum = max(dq)[0]
         ans += 1
