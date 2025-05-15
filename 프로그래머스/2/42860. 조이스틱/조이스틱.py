@@ -1,20 +1,21 @@
 def solution(name):
-	ans = 0
+    answer = 0
 
-	move = len(name)-1
-	for left, n in enumerate(name):
-		ans += min(ord(n)-ord('A'), ord('Z')-ord(n)+1)
+    for n in name:
+        answer += min(ord(n)-ord('A'), ord('Z')-ord(n)+1)
 
-		i = left+1
-		while i < len(name) and name[i]=='A':
-			i += 1
+    idx = 0
+    move = len(name)-1
+    for i, n in enumerate(name):
+        if n == 'A':
+            idx = i
 
-		right = len(name)-i
+            while idx < len(name) and name[idx]=='A':
+                idx += 1
 
-		print(left, right, i)
+            left = (i-1 if i else i)
+            right = len(name)-idx
+            move = min(move, left+right+min(left, right))
 
-		move = min(move, right*2 + left)
-		move = min(move, left*2 + right)
-
-	ans += move
-	return ans
+    answer += move
+    return answer
