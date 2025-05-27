@@ -1,21 +1,28 @@
-def sec(time):
-    return int(time[:2])*60 + int(time[3:])
-
 def solution(video_len, pos, op_start, op_end, commands):
-    video_len = sec(video_len)
-    op_start = sec(op_start)
-    op_end = sec(op_end)
-    pos = op_end if (op_start <= sec(pos) <= op_end) else sec(pos)
-    
-    for command in commands:
-        if command == 'prev':
-            pos = pos-10 if pos-10 >= 0 else 0
-        else:
-            pos = pos+10 if pos+10 < video_len else video_len 
-        
-        pos = op_end if (op_start <= pos <= op_end) else pos
-    
-    minute, second = int(pos/60), int(pos%60)
-    answer = f'{minute:02d}:{second:02d}'
+    answer = ''
 
+    video_len = int(video_len.split(':')[0])*60 + int(video_len.split(':')[1])
+    pos = int(pos.split(':')[0])*60 + int(pos.split(':')[1])
+    op_start = int(op_start.split(':')[0])*60 + int(op_start.split(':')[1])
+    op_end = int(op_end.split(':')[0])*60 + int(op_end.split(':')[1])
+
+    for command in commands:
+        if op_start <= pos <= op_end:
+            pos = op_end
+        
+        if command == 'prev':
+            pos -= 10
+            if pos < 0:
+                pos = 0
+            elif op_start <= pos <= op_end:
+                pos = op_end
+        else:
+            pos += 10
+            if pos > video_len:
+                pos = video_len
+            elif op_start <= pos <= op_end:
+                pos = op_end
+    
+    answer = f'{pos//60:02d}:{pos%60:02d}'
+    
     return answer
