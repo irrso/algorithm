@@ -1,31 +1,25 @@
-from collections import deque
-
-
 def solution(bandage, health, attacks):
-    answer = health
-    cont = 0
+    t, x, y = bandage[0], bandage[1], bandage[2]
+    max_health = health
+    cons = 0
     
-    dq = deque()
-    for a, b in attacks:
-        dq.append((a, b)) 
+    for i in range(1, attacks[-1][0]+1):
+        for attack in attacks:
+            time, damage = attack[0], attack[1]
+            if i == time:
+                cons = 0
+                health -= damage
+                if health <= 0:
+                    return -1
+                break
+        
+        if i != time:
+            cons += 1
+            if cons == t:
+                health += y
+                cons = 0
+            health += x
+            if health > max_health:
+                health = max_health
     
-    for i in range(1, dq[-1][0]+1):
-        if i == dq[0][0]:
-            time, damage = dq.popleft()
-            answer -= damage
-            cont = 0
-        else:
-            cont += 1
-            if cont == bandage[0]:
-                answer += bandage[1]+bandage[2]
-                answer = health if answer > health else answer
-                cont = 0
-            else:
-                answer += bandage[1]
-                answer = health if answer > health else answer
-                
-        if answer <= 0:
-                return -1
-
-        if not dq:
-            return answer
+    return health
