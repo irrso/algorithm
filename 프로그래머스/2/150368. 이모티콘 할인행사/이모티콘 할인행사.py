@@ -4,29 +4,21 @@ def solution(users, emoticons):
     answer = []
     n, m = len(users), len(emoticons)
         
-    for i, discount in enumerate(product([10, 20, 30, 40], repeat=m)):
+    for discount in product([10, 20, 30, 40], repeat=m):
         membership, tot_price = 0, 0
         
-        for user in users:
-            percent, price = user
-            em_price = 0
+        for percent, price in users:
+            user_price = 0
             
-            for dc, emoticon in zip(discount, emoticons):
-                if dc >= percent:
-                    em_price += emoticon*((100-dc)/100)
+            for em_percent, em_price in zip(discount, emoticons):
+                if em_percent >= percent:
+                    user_price += em_price*((100-em_percent)/100)
                     
-            if em_price >= price:
+            if user_price >= price:
                 membership += 1
             else:
-                tot_price += em_price
+                tot_price += user_price
         
-        if i == 0:
-            answer = [membership, tot_price]
-            continue
-        
-        if answer[0] < membership:
-            answer = [membership, tot_price]
-        elif answer[0] == membership and answer[1] < tot_price:
-            answer = [membership, tot_price]
+        answer = max(answer, [membership, tot_price])
                 
     return answer
