@@ -1,5 +1,4 @@
 def solution(x, y, n):
-    answer = 0
     INF = int(1e6)
     
     dp = [INF]*(y+1)
